@@ -1,17 +1,46 @@
-from flask import Flask
-from flask_restful import Api, Resource
+from flask import Flask, redirect, render_template, request, url_for
+from flask_socketio import SocketIO, join_room
+# from flask_restful import Api, Resource
 
 app = Flask(__name__)
-api = Api(app)
+socketio = SocketIO(app)
 
 
-class Message(Resource):
-    def get(self, message_id):
-        res = {"message_id": message_id}
-        return res
+@app.route('/')
+def home():
+    return render_template('index.html')
 
 
-api.add_resource(Message, '/message/<int:message_id>')
+@app.route('/chat')
+def chat():
+    username = request.args.get('username')
+    room = request.args.get('room')
+
+    if username and room:
+        return render_template('chat.html', room=room, username=username)
+    else:
+        return redirect(url_for('home'))
+# class Message(Resource):
+#     def get(self, message_id):
+#         res = {"message_id": message_id}
+#         return res
+
+
+# api.add_resource(Message, '/message/<int:message_id>')
+@socketio.on('send_message')
+def handle_send_message_event(data):
+    app.logger.info('{} has sent message to room {}: {}'.format(
+        data['username'], data['room'], data['message']))
+    socketio.emit('receive_message', data, room=data['room'])
+
+
+@socketio.on('join_room')
+def handle_join_room_event(data):
+    app.logger.info("{} has joined then room {}".format(
+        data['username'], data['room']))
+    join_room(data['room'])
+    socketio.emit('join_room_announcement', data)
+
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    socketio.run(app, debug=True)
