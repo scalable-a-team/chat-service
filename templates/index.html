@@ -6,16 +6,47 @@
 </head>
 <body>
     <h1>Chat App</h1>
-    <form action="/chat">
+    <!-- <form action="/chat"> -->
+    <form action='/chat' id="chat_form">
         <div>
-            <label>Enter your username:</label>
-            <input type="text" name="username">
+            <label>Enter sender:</label>
+            <input type="text" name="sender">
         </div>
         <div>
-            <label>Enter room id:</label>
-            <input type="text" name="room">
+            <label>Enter receiver:</label>
+            <input type="text" name="receiver">
         </div>
+        <!-- <div>
+            <label>Enter message:</label>
+            <input type="text" name="message">
+        </div> -->
         <button type="submit">Submit</button>
     </form>
 </body>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
+<script>
+    const socket = io.connect('http://127.0.0.1:5000')
+    const session_id = Math.random().toString(26).slice(0,8)
+
+    socket.on('connect', function(){
+
+        document.getElementById('chat_form').onsubmit = function (e) {
+            e.preventDefault();
+            const form = e.target;
+            const sender = form.elements['sender'].value;
+            const receiver = form.elements['receiver'].value;
+            const message = form.elements['message'].value;
+            socket.emit('send_message', {
+                sender: sender,
+                session_id: session_id,
+                receiver: receiver,
+                message: message,
+            }) 
+        }
+    })
+    // socket.on('connect', function(){
+    //     // socket.emit('')
+    //     // let message = 
+    // })
+</script> -->
 </html>

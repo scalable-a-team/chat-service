@@ -7,37 +7,44 @@
 <body>
     <h1>Welcome to chat room {{sender}} & {{receiver}}</h1>
     <div id="messages">
-       <form id='message_input_form'>
-            <input type="text" id="message_input" placeholder="Enter your message here">
-            <button type="submit">Send</button>
-       </form> 
     </div>
 </body>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.5.0/socket.io.js"></script>
 <script>
     const socket = io.connect('http://127.0.0.1:5000');
-    const session_id = Math.random().toString(36).slice(0,10)
-    socket.on('connect', function(){
+    // const session_id = Math.random().toString(36).slice(0,10)
+    socket.on('connect', async function(){
+        // const sender = {{c}}
+        const session_id = await fetch(`/get_session?sender=${{sender}}&receiver=${{receiver}}`).then(res=>res.json()).then(data=>data)
+        console.log('session_id ' + session_id)
+
         socket.emit('join_session',{
             sender: '{{sender}}',
             session_id: session_id,
             receiver: '{{receiver}}',
         });
-        let message_input=document.getElementById('message_input')
-        document.getElementById('message_input_form').onsubmit = function (e){
-            e.preventDefault();
-            let message = message_input.value.trim();
-            if (message.length){
-                socket.emit('send_message', {
-                    sender: '{{sender}}',
-                    session_id: session_id,
-                    receiver: '{{receiver}}',
-                    message: message
-                })
-                message_input.value = '';
-                message_input.focus();
-            }
-        }
+        // const res = await fetch(`/get_message/${data}`)
+        // socket.emit('join_session',{
+
+        //     sender: '{{sender}}',
+        //     session_id: session_id,
+        //     receiver: '{{receiver}}',
+        // });
+        // let message_input=document.getElementById('message_input')
+        // document.getElementById('message_input_form').onsubmit = function (e){
+        //     e.preventDefault();
+        //     let message = message_input.value.trim();
+        //     if (message.length){
+        //         socket.emit('send_message', {
+        //             sender: '{{sender}}',
+        //             session_id: session_id,
+        //             receiver: '{{receiver}}',
+        //             message: message
+        //         })
+        //         message_input.value = '';
+        //         message_input.focus();
+        //     }
+        // }
     });
     socket.on('receive_message', async function(data){
         // const res = await fetch(`/get_message/${data['room']}`).then(res=>res.json()).then(data=>data)
