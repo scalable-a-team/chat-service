@@ -13,7 +13,7 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 print('init')
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*", path='/api/chat')
+socketio = SocketIO(app, cors_allowed_origins="*", path='api/chat/socket.io')
 MONGO_HOST = os.environ['DB_HOST']
 MONGO_PORT = os.environ['DB_PORT']
 MONGO_DRIVE = f'mongodb://{MONGO_HOST}:{MONGO_PORT}'
