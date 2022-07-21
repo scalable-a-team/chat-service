@@ -35,19 +35,22 @@ def get_messages(sender_id, receiver_id):
 
     for data in s1:
         data['ts'] = datetime.fromtimestamp(
-            data['timestamp']).strftime("%Y-%m-%d %H:%M:%S")
+            data['timestamp']).strftime("%Y-%m-%d %H:%M")
         s3.append(data)
     for data in s2:
         data['ts'] = datetime.fromtimestamp(
-            data['timestamp']).strftime("%Y-%m-%d %H:%M:%S")
+            data['timestamp']).strftime("%Y-%m-%d %H:%M")
         s3.append(data)
     s4 = sorted(s3, key=lambda x: (float(x['timestamp'])))
-    print('--------------')
-    print(s4)
-    print('--------------')
     if s1 is not None or s2 is not None:
         return json.dumps(s4), 200
     return {'message': 'error with sender and/or receiver ID'}, 400
+
+
+@app.route(API_PREFIX + '/get_messages_channel/<string:sender_id>', methods=['GET'])
+def get_messages_channel(sender_id):
+    data = message_collection.distinct('receiver_id', {'sender_id': sender_id})
+    return json_util.dumps(data), 200
 
 
 @ app.route('/chat')
@@ -108,4 +111,4 @@ def establish_conn(sender_id):
 
 
 if __name__ == "__main__":
-    socketio.run(app, debug=True)
+    socketio.run(app, debug=True, host='0.0.0.0')
