@@ -1,3 +1,4 @@
+from importlib.resources import path
 import json
 from flask import Flask, jsonify, redirect, render_template, request, url_for
 from flask_socketio import SocketIO, join_room, leave_room
@@ -12,7 +13,7 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 print('init')
 CORS(app)
-socketio = SocketIO(app, cors_allowed_origins="*")
+socketio = SocketIO(app, cors_allowed_origins="*", path='/api/chat')
 MONGO_HOST = os.environ['DB_HOST']
 MONGO_PORT = os.environ['DB_PORT']
 MONGO_DRIVE = f'mongodb://{MONGO_HOST}:{MONGO_PORT}'
