@@ -19,7 +19,7 @@ message_collection = db['messages']
 session_collection = db['sessions']
 
 
-@app.route(API_PREFIX + '/get_messages/<string:sender_id>/<string:receiver_id>', methods=['GET'])
+@app.route(API_PREFIX + '/chat/get_messages/<string:sender_id>/<string:receiver_id>', methods=['GET'])
 def get_messages(sender_id, receiver_id):
     data1 = message_collection.find({
         'sender_id': sender_id,
@@ -47,21 +47,11 @@ def get_messages(sender_id, receiver_id):
     return {'message': 'error with sender and/or receiver ID'}, 400
 
 
-@app.route(API_PREFIX + '/get_messages_channel/<string:sender_id>', methods=['GET'])
+@app.route(API_PREFIX + '/chat/get_messages_channel/<string:sender_id>', methods=['GET'])
 def get_messages_channel(sender_id):
     data = message_collection.distinct('receiver_id', {'sender_id': sender_id})
     return json_util.dumps(data), 200
 
-
-@ app.route('/chat')
-def chat():
-    username = request.args.get('username')
-    room = request.args.get('room')
-
-    if username and room:
-        return render_template('chat.html', username=username, room=room)
-    else:
-        return redirect(url_for('home'))
 
 
 @ socketio.on('send_message')
@@ -90,7 +80,7 @@ def handle_join_room_event(data):
 
 
 # FOR SESSION
-@ app.route('/api/establish_conn/<string:sender_id>', methods=["GET"])
+@ app.route(API_PREFIX + '/chat/establish_conn/<string:sender_id>', methods=["GET"])
 # @cross_origin()
 def establish_conn(sender_id):
     session_id = randint(10000, 99999)
