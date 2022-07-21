@@ -15,7 +15,7 @@ CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 MONGO_HOST = os.environ['DB_HOST']
 MONGO_PORT = os.environ['DB_PORT']
-MONGO_DRIVE = f'mongodb://{MONGO_HOST:MONGO_PORT}'
+MONGO_DRIVE = f'mongodb://{MONGO_HOST}:{MONGO_PORT}'
 print('-----------')
 print(MONGO_DRIVE)
 print('-----------')
