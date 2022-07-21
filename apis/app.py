@@ -11,9 +11,14 @@ from flask_cors import CORS, cross_origin
 app = Flask(__name__)
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
-
+MONGO_HOST = os.environ['DB_HOST']
+# MONGO_PORT =
+MONGO_DRIVE = f'mongodb://{MONGO_HOST}'
+print('-----------')
+print(MONGO_DRIVE)
+print('-----------')
 cluster = MongoClient(
-    MONGO_URI)
+    MONGO_DRIVE)
 db = cluster['chat']
 message_collection = db['messages']
 session_collection = db['sessions']
