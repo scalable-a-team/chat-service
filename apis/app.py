@@ -26,6 +26,9 @@ message_collection = db['messages']
 session_collection = db['sessions']
 
 
+@app.route(API_PREFIX + '/chat/test')
+def test():
+    return 'test',200
 @app.route(API_PREFIX + '/chat/get_messages/<string:sender_id>/<string:receiver_id>', methods=['GET'])
 def get_messages(sender_id, receiver_id):
     data1 = message_collection.find({
