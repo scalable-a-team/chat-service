@@ -10,6 +10,7 @@ import os
 from random import randint
 from flask_cors import CORS, cross_origin
 app = Flask(__name__)
+print('init')
 CORS(app)
 socketio = SocketIO(app, cors_allowed_origins="*")
 MONGO_HOST = os.environ['DB_HOST']
