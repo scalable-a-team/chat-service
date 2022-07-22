@@ -60,8 +60,13 @@ def get_messages(sender_id, receiver_id):
 
 @app.route(API_PREFIX + '/chat/get_messages_channel/<string:sender_id>', methods=['GET'])
 def get_messages_channel(sender_id):
-    data = message_collection.distinct('receiver_id', {'sender_id': sender_id})
-    return json_util.dumps(data), 200
+    data1 = message_collection.distinct('receiver_id', {'sender_id': sender_id})
+    data2 = message_collection.distinct('sender_id', {'receiver_id': sender_id})
+    data3 = data1 + data2
+
+    if data1 is not None or data2 is not None:
+        return json_util.dumps(list(set(data3))), 200
+    return {'message': 'no channel yet'}, 200
 
 
 
