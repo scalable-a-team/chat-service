@@ -1,5 +1,5 @@
 # start by pulling the python image
-FROM python:3.8-alpine
+FROM python:3.8
 
 # copy the requirements file into the image
 COPY ./apis/requirements.txt /app/requirements.txt
@@ -14,7 +14,7 @@ RUN pip install -r requirements.txt
 COPY ./apis /app
 
 # configure the container to run in an executed manner
-ENTRYPOINT [ "python" ]
+ENTRYPOINT [ "opentelemetry-instrument", "python" ]
 
 CMD ["app.py" ]
 # FROM python:3.7-alpine
